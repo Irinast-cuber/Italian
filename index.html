@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piano Italiano | 0 → B1/B2 за 9 месяцев</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --border: #e9ecef;
+    --text: #212529;
+    --text-dim: #6c757d;
+    --text-faint: #adb5bd;
+    --accent: #009246;
+    --accent-light: #e6f4ec;
+    --accent2: #ce2b37;
+    --green: #2a9d8f;
+    --green-light: #e6fcf5;
+    --red: #e63946;
+    --blue: #4dabf7;
+    --purple: #9775fa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding-bottom: 80px;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--card);
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    gap: 10px;
+  }
+
+  .logo { font-size: 15px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+  .header-badges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .badge-mini {
+    background: var(--bg); padding: 4px 10px; border-radius: 20px;
+    font-size: 11px; color: var(--text-dim); font-weight: 500;
+  }
+  .badge-mini.fire { background: #fff3e0; color: #fd7e14; }
+  .badge-mini.flag { background: var(--accent-light); color: var(--accent); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 30;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  nav button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 4px 10px;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.15s;
+  }
+
+  nav button .icon { font-size: 20px; line-height: 1; }
+  nav button.active { color: var(--accent); font-weight: 600; }
+  nav button.active .icon { transform: scale(1.1); }
+
+  /* MAIN */
+  main { max-width: 640px; margin: 0 auto; padding: 12px; }
+
+  .tab { display: none; }
+  .tab.active { display: block; animation: fade 0.2s; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .meta { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+
+  /* INPUTS */
+  input[type="text"], input[type="number"], input[type="time"], input[type="date"], textarea, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    background: #fafbfc;
+    color: var(--text);
+    transition: all 0.15s;
+    -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: var(--accent); background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,146,70,0.08);
+  }
+  textarea { resize: vertical; min-height: 60px; line-height: 1.4; }
+
+  label.field-label {
+    display: block; font-size: 11px; color: var(--text-dim);
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; font-weight: 500;
+  }
+
+  .row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 100px; }
+  .row:last-child { margin-bottom: 0; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+  .progress-bar { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), #52b788);
+    border-radius: 4px; transition: width 0.4s ease;
+  }
+  .progress-fill.green { background: linear-gradient(90deg, var(--green), #52b788); }
+  .progress-text { font-size: 12px; font-weight: 600; color: var(--accent); min-width: 35px; text-align: right; }
+  .progress-text.green { color: var(--green); }
+
+  /* TASKS */
+  .task-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item input[type="checkbox"] {
+    width: 20px; height: 20px; margin-top: 2px;
+    accent-color: var(--green); cursor: pointer; flex-shrink: 0;
+  }
+  .task-item span { font-size: 14px; flex: 1; word-break: break-word; }
+  .task-item input:checked + span { text-decoration: line-through; color: var(--text-faint); }
+
+  .task-del {
+    background: transparent; border: none; color: var(--text-faint);
+    font-size: 18px; padding: 0 4px; cursor: pointer; align-self: center;
+  }
+  .task-del:hover { color: var(--red); }
+
+  /* POMODORO */
+  .pomodoro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 420px) { .pomodoro-grid { grid-template-columns: 1fr; } }
+
+  .pomo-card {
+    background: #fafbfc; border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px;
+  }
+  .pomo-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text-dim);
+  }
+  .pomo-head .num { color: var(--accent); }
+  .time-row { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .time-row input { padding: 6px 8px; font-size: 12px; text-align: center; }
+  .time-row .sep { color: var(--text-faint); font-size: 12px; }
+
+  /* BUTTONS */
+  .btn {
+    background: var(--accent); color: white; border: none;
+    padding: 12px 16px; border-radius: 10px; font-family: inherit;
+    font-size: 14px; font-weight: 600; cursor: pointer; width: 100%;
+    transition: all 0.15s; margin-top: 8px;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-outline {
+    background: transparent; border: 1.5px dashed var(--border); color: var(--text-dim);
+    padding: 10px; font-weight: 500;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .btn-success { background: var(--green); }
+  .btn-danger { background: var(--red); }
+  .btn-gray { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+
+  /* STATS */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    margin-bottom: 12px;
+  }
+  .stat-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px;
+  }
+  .stat-box .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+  .stat-box .value { font-size: 22px; font-weight: 700; line-height: 1; }
+  .stat-box .value small { font-size: 12px; font-weight: 400; color: var(--text-faint); }
+  .stat-box.accent .value { color: var(--accent); }
+  .stat-box.green .value { color: var(--green); }
+  .stat-box.blue .value { color: var(--blue); }
+  .stat-box.purple .value { color: var(--purple); }
+
+  /* CHART */
+  .chart {
+    display: flex; align-items: flex-end; gap: 4px;
+    height: 120px; padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .chart-bar {
+    flex: 1; background: linear-gradient(180deg, var(--accent), #52b788);
+    border-radius: 4px 4px 0 0; min-height: 2px; position: relative;
+    transition: opacity 0.15s;
+  }
+  .chart-bar:hover { opacity: 0.8; }
+  .chart-bar .bar-label {
+    position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; color: var(--text-faint); white-space: nowrap;
+  }
+  .chart-wrap { padding-bottom: 22px; }
+
+  /* HISTORY LIST */
+  .history-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; transition: all 0.15s; gap: 10px;
+  }
+  .history-item:hover { border-color: var(--accent); transform: translateX(2px); }
+  .history-item .date-main { font-size: 14px; font-weight: 600; }
+  .history-item .date-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .history-item .score {
+    font-size: 16px; font-weight: 700; color: var(--accent);
+    flex-shrink: 0;
+  }
+  .history-item .score.good { color: var(--green); }
+  .history-item .score.low { color: var(--red); }
+
+  .empty-state {
+    text-align: center; padding: 40px 20px; color: var(--text-dim);
+    font-size: 14px;
+  }
+  .empty-state .emoji { font-size: 40px; display: block; margin-bottom: 12px; }
+
+  /* MODAL */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 100; display: none; align-items: flex-end; justify-content: center;
+    animation: fadeIn 0.2s;
+  }
+  .modal-backdrop.open { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--card); width: 100%; max-width: 640px;
+    max-height: 88vh; overflow-y: auto;
+    border-radius: 16px 16px 0 0; padding: 20px;
+    animation: slideUp 0.25s;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .modal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  }
+  .modal-head h2 { font-size: 17px; }
+  .modal-close {
+    background: var(--bg); border: none; width: 32px; height: 32px;
+    border-radius: 50%; font-size: 18px; cursor: pointer; color: var(--text-dim);
+  }
+
+  .modal-section {
+    margin-bottom: 14px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-section:last-child { border-bottom: none; }
+  .modal-section h3 { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 8px; font-weight: 600; }
+  .modal-section p { font-size: 14px; margin-bottom: 4px; }
+  .modal-section p.empty { color: var(--text-faint); font-style: italic; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: white; padding: 10px 20px;
+    border-radius: 20px; font-size: 13px; font-weight: 500;
+    opacity: 0; transition: all 0.3s; z-index: 200; pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  h2.section { font-size: 16px; font-weight: 700; margin: 16px 4px 10px; color: var(--text); }
+
+  /* LEVEL BADGE */
+  .level-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.4px;
+  }
+  .level-A1 { background: #e7f5ff; color: #1971c2; }
+  .level-A2 { background: #e6fcf5; color: #087f5b; }
+  .level-B1 { background: #fff9db; color: #e67700; }
+  .level-B2 { background: #ffe3e3; color: #c92a2a; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🇮🇹 Piano Italiano</div>
+  <div class="header-badges">
+    <span class="badge-mini fire" id="streakBadge">🔥 0</span>
+    <span class="badge-mini flag" id="wordsBadge">0 / 3000</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ========== TODAY TAB ========== -->
+  <div class="tab active" id="tab-today">
+
+    <div class="card">
+      <label class="field-label">Дата</label>
+      <input type="date" id="currentDate">
+      <div style="font-size:11px; color:var(--text-dim); margin-top:6px;">
+        Можно открыть и отредактировать любой прошлый день
+      </div>
+    </div>
+
+    <!-- MONTHLY GOAL -->
+    <div class="card">
+      <div class="card-title">
+        🎯 Цель месяца
+        <span class="meta" id="monthlyDeadlineMeta"></span>
+      </div>
+      <label class="field-label">Цель</label>
+      <input type="text" id="monthlyGoal" placeholder="Например: закончить A1, 500 слов, presente" style="margin-bottom:10px;">
+      <div class="row">
+        <div>
+          <label class="field-label">Прогресс (%)</label>
+          <input type="number" id="monthlyProgress" min="0" max="100" placeholder="15">
+        </div>
+        <div>
+          <label class="field-label">Дедлайн</label>
+          <input type="text" id="monthlyDeadline" placeholder="31.12.2026">
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="monthlyBar"></div></div>
+        <div class="progress-text" id="monthlyText">0%</div>
+      </div>
+    </div>
+
+    <!-- WEEKLY GOALS -->
+    <div class="card">
+      <div class="card-title">📅 Фокус недели (2 блока)</div>
+      <div class="week-grid" style="display:grid; grid-template-columns:1fr; gap:10px;">
+        <div style="background:#fafbfc; border:1px solid var(--border); border-radius:8px; padding:10px;">
+          <label class="field-label">Блок A — грамматика</label>
+          <input type="text" id="w1text" placeholder="Presente indicativo: -are / -ere / -ire" style="margin-bottom:8px; font-size:13px;">
+          <div class="progress-wrap" style="margin:0;">
+            <div class="progress-bar"><div class="progress-fill green" id="w1bar"></div></div>
+            <div class="progress-text green" id="w1pct">0%</div>
+          </div>
+          <input type="number" id="w1progress" min="0" max="100" placeholder="Прогресс %" style="margin-top:8px; font-size:13px;">
+        </div>
+        <div style="background:#fafbfc; border:1px solid var(--border); border-radius:8px; padding:10px;">
+          <label class="field-label">Блок B — лексика / тема</label>
+          <input type="text" id="w2text" placeholder="Città e trasporti (город и транспорт)" style="margin-bottom:8px; font-size:13px;">
+          <div class="progress-wrap" style="margin:0;">
+            <div class="progress-bar"><div class="progress-fill green" id="w2bar"></div></div>
+            <div class="progress-text green" id="w2pct">0%</div>
+          </div>
+          <input type="number" id="w2progress" min="0" max="100" placeholder="Прогресс %" style="margin-top:8px; font-size:13px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW WORDS TODAY -->
+    <div class="card">
+      <div class="card-title">📖 Новые слова и грамматика сегодня</div>
+      <div class="row">
+        <div>
+          <label class="field-label">Выучено слов</label>
+          <input type="number" id="newWords" min="0" placeholder="20">
+        </div>
+        <div>
+          <label class="field-label">Грамматика дня</label>
+          <input type="text" id="grammarText" placeholder="Passato prossimo с essere">
+        </div>
+      </div>
+      <label class="field-label" style="margin-top:8px;">Фразы / выражения дня</label>
+      <textarea id="phrasesText" placeholder="1. Che cosa hai fatto ieri?&#10;2. Mi piace molto...&#10;3. Non vedo l'ora di..."></textarea>
+    </div>
+
+    <!-- TASKS -->
+    <div class="card">
+      <div class="card-title">📌 Цели на день</div>
+      <div id="tasksList"></div>
+      <button class="btn btn-outline" onclick="addTask()">+ Добавить задачу</button>
+    </div>
+
+    <!-- POMODOROS -->
+    <div class="card">
+      <div class="card-title">🍅 Помидоры <span class="meta">заполняй после каждого</span></div>
+      <div class="pomodoro-grid" id="pomodorosList"></div>
+    </div>
+
+    <!-- REFLECTION -->
+    <div class="card">
+      <div class="card-title">🌙 Вечерняя рефлексия</div>
+      <div class="row">
+        <div>
+          <label class="field-label">Итог дня</label>
+          <input type="text" id="refWord" placeholder="Продуктивно / Тяжело">
+        </div>
+        <div>
+          <label class="field-label">Оценка 1–5</label>
+          <input type="number" id="refScore" min="1" max="5" placeholder="4">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label class="field-label">Время занятий (мин)</label>
+          <input type="number" id="refTime" placeholder="180">
+        </div>
+        <div>
+          <label class="field-label">Что повторить завтра</label>
+          <input type="text" id="refReview" placeholder="Неправильные глаголы: andare, fare">
+        </div>
+      </div>
+      <label class="field-label" style="margin-top:8px;">Ошибки / что не получилось</label>
+      <textarea id="refMistakes" placeholder="1. Путаю essere/avere в passato prossimo&#10;2. Забыл артикли перед гласными"></textarea>
+      <label class="field-label" style="margin-top:8px;">Говорил(а) вслух сколько минут?</label>
+      <input type="number" id="refSpeaking" placeholder="10">
+    </div>
+
+    <!-- TEST / WEEK RESULTS -->
+    <div class="card">
+      <div class="card-title">📝 Суббота — пробный тест <span class="meta">CILS / CELI</span></div>
+      <div class="row">
+        <div><label class="field-label">Asoltо /20</label><input type="number" id="testListening" placeholder="14"></div>
+        <div><label class="field-label">Lettura /20</label><input type="number" id="testReading" placeholder="15"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Grammatica /20</label><input type="number" id="testGrammar" placeholder="13"></div>
+        <div><label class="field-label">Scrittura /20</label><input type="number" id="testWriting" placeholder="12"></div>
+      </div>
+      <div class="row">
+        <div><label class="field-label">Orale /20</label><input type="number" id="testSpeaking" placeholder="14"></div>
+        <div><label class="field-label">Итог %</label><input type="number" id="testTotal" placeholder="68"></div>
+      </div>
+      <div style="font-size:11px; color:var(--text-dim); margin-top:6px;">
+        Проходной балл CILS: минимум 11/20 по каждому модулю.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Воскресенье — итоги недели</div>
+      <div class="row">
+        <div><label class="field-label">Слов за неделю</label><input type="number" id="weekWords" placeholder="120"></div>
+        <div><label class="field-label">Знаю твёрдо</label><input type="number" id="weekSolid" placeholder="90"></div>
+      </div>
+      <label class="field-label">Главная победа недели</label>
+      <textarea id="weekVictory" placeholder="Впервые понял(а) подкаст без субтитров"></textarea>
+      <label class="field-label" style="margin-top:8px;">Что изменить на следующей неделе</label>
+      <textarea id="weekAdjust" placeholder="Добавить 10 мин shadowing каждый день"></textarea>
+    </div>
+
+    <button class="btn btn-success" onclick="saveDay()">💾 Сохранить день</button>
+    <div style="height:20px;"></div>
+
+  </div>
+
+  <!-- ========== HISTORY TAB ========== -->
+  <div class="tab" id="tab-history">
+    <h2 class="section">📚 История дней</h2>
+    <div id="historyList"></div>
+  </div>
+
+  <!-- ========== PROGRESS TAB ========== -->
+  <div class="tab" id="tab-progress">
+    <h2 class="section">📈 Общий прогресс</h2>
+
+    <div class="stats-grid">
+      <div class="stat-box accent">
+        <div class="label">Всего слов</div>
+        <div class="value" id="statTotalWords">0 <small>/ 3000</small></div>
+      </div>
+      <div class="stat-box green">
+        <div class="label">Стрик</div>
+        <div class="value" id="statStreak">0 <small>дней</small></div>
+      </div>
+      <div class="stat-box blue">
+        <div class="label">Средняя оценка</div>
+        <div class="value" id="statAvgScore">— <small>/ 5</small></div>
+      </div>
+      <div class="stat-box purple">
+        <div class="label">Помидоров всего</div>
+        <div class="value" id="statPomos">0</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="label">Минут говорения</div>
+        <div class="value" id="statSpeaking">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Часов занятий</div>
+        <div class="value" id="statHours">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Слова за последние 14 дней</div>
+      <div class="chart-wrap">
+        <div class="chart" id="chartWords"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Оценки за последние 14 дней</div>
+      <div class="chart-wrap">
+        <div class="chart" id="chartScores"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Прогресс к B2 (3000 слов)</div>
+      <div class="progress-wrap">
+        <div class="progress-bar" style="height:12px;"><div class="progress-fill" id="overallBar"></div></div>
+        <div class="progress-text" id="overallPct">0%</div>
+      </div>
+      <div style="font-size:12px; color:var(--text-dim); margin-top:10px; line-height:1.6;">
+        <span class="level-badge level-A1">A1</span> 500 слов · presente, артикли, базовые фразы<br>
+        <span class="level-badge level-A2">A2</span> 1200 слов · passato prossimo, futuro, бытовые темы<br>
+        <span class="level-badge level-B1">B1</span> 2000 слов · congiuntivo presente, мнение, аргументация<br>
+        <span class="level-badge level-B2">B2</span> 3000 слов · congiuntivo passato, абстрактные темы, эссе
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Чекпоинты курса</div>
+      <div id="checkpointsList" style="font-size:13px;"></div>
+    </div>
+  </div>
+
+  <!-- ========== SETTINGS TAB ========== -->
+  <div class="tab" id="tab-settings">
+    <h2 class="section">⚙️ Настройки</h2>
+
+    <div class="card">
+      <div class="card-title">💾 Резервная копия</div>
+      <div style="font-size:13px; color:var(--text-dim); margin-bottom:12px;">
+        Скачай файл с данными, чтобы не потерять историю при чистке браузера или смене телефона.
+      </div>
+      <button class="btn btn-gray" onclick="exportData()">⬇️ Скачать бэкап (.json)</button>
+      <button class="btn btn-gray" onclick="document.getElementById('importFile').click()">⬆️ Загрузить бэкап</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗑️ Опасная зона</div>
+      <div style="font-size:13px; color:var(--text-dim); margin-bottom:12px;">
+        Удалит всю историю, все записи и настройки. Восстановить не получится.
+      </div>
+      <button class="btn btn-danger" onclick="resetAll()">Удалить все данные</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ℹ️ О планере</div>
+      <div style="font-size:13px; color:var(--text-dim); line-height:1.6;">
+        <b>Цель:</b> B1/B2 к июню 2027 (CILS / CELI).<br>
+        <b>Старт:</b> октябрь 2026.<br>
+        <b>Интенсив:</b> 3–4 часа в день.<br><br>
+        Все данные хранятся в браузере телефона (localStorage).<br>
+        Ничего не отправляется в интернет.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📚 Ресурсы</div>
+      <div style="font-size:13px; color:var(--text-dim); line-height:1.7;">
+        <b>Учебники:</b> Nuovo Espresso 1–3 · Universitalia 2.0<br>
+        <b>Грамматика:</b> Буэно — Полная грамматика · Nocchi — Italian Grammar in Practice<br>
+        <b>Аудио:</b> Coffee Break Italian · Italiano Automatico · RAI Play<br>
+        <b>Приложения:</b> Anki · Forvo · Tandem / HelloTalk<br>
+        <b>Экзамен:</b> Test di italiano B1 e B2 (Boero) · Perfetto! 2
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav>
+  <button class="active" data-tab="today">
+    <span class="icon">📝</span><span>Сегодня</span>
+  </button>
+  <button data-tab="history">
+    <span class="icon">📚</span><span>История</span>
+  </button>
+  <button data-tab="progress">
+    <span class="icon">📈</span><span>Прогресс</span>
+  </button>
+  <button data-tab="settings">
+    <span class="icon">⚙️</span><span>Ещё</span>
+  </button>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h2 id="modalTitle">День</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ==========================================
+// ДАННЫЕ
+// ==========================================
+const STORAGE_KEY = 'italiano_planner_v1';
+const TOTAL_WORDS_TARGET = 3000;
+
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+const DEFAULT_TASKS = [
+  'Anki — повторить карточки (15 мин)',
+  'Грамматика дня + 10 упражнений',
+  'Аудирование: подкаст/диалог (15 мин)',
+  'Чтение вслух (10 мин)',
+  'Письмо: 10–15 предложений с новыми словами',
+  'Говорение: монолог на диктофон (5–10 мин)'
+];
+
+const DEFAULT_POMODOROS = [
+  { num: 1, start: '09:00', end: '09:30', task: 'Anki + чтение вслух', note: '' },
+  { num: 2, start: '09:40', end: '10:25', task: 'Грамматика + упражнения', note: '' },
+  { num: 3, start: '10:35', end: '11:05', task: 'Аудирование + shadowing', note: '' },
+  { num: 4, start: '11:15', end: '11:45', task: 'Лексика: 15–20 новых слов', note: '' },
+  { num: 5, start: '12:00', end: '12:30', task: 'Письмо', note: '' },
+  { num: 6, start: '12:40', end: '13:10', task: 'Говорение: монолог', note: '' }
+];
+
+const CHECKPOINTS = [
+  { id: 'A1', label: 'Ноя 2026 · A1 — представиться, заказать еду, понять простой вопрос', target: 500 },
+  { id: 'A2', label: 'Янв 2027 · A2 — рассказать о прошлом и планах', target: 1200 },
+  { id: 'B1', label: 'Мар 2027 · B1 — выразить мнение, понять подкаст', target: 2000 },
+  { id: 'B2', label: 'Май 2027 · B2 — читать новости, congiuntivo', target: 3000 },
+  { id: 'EXAM', label: 'Июн 2027 · Сдать CILS / CELI', target: 3000 }
+];
+
+let state = {
+  days: {},
+  settings: {
+    monthlyGoal: '',
+    monthlyProgress: 0,
+    monthlyDeadline: '',
+    w1text: '', w1progress: 0,
+    w2text: '', w2progress: 0,
+    checkpoints: {}
+  }
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      state = { ...state, ...parsed };
+      state.settings = { ...state.settings, ...(parsed.settings || {}) };
+      state.settings.checkpoints = state.settings.checkpoints || {};
+    }
+  } catch(e) { console.error('Load error:', e); }
+}
+
+function persist() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ==========================================
+// ДЕНЬ
+// ==========================================
+function getDay(date) {
+  if (!state.days[date]) {
+    state.days[date] = {
+      tasks: DEFAULT_TASKS.map((t, i) => ({ id: 't' + i + '_' + Date.now(), text: t, done: false })),
+      newWords: 0,
+      grammarText: '',
+      phrasesText: '',
+      pomodoros: DEFAULT_POMODOROS.map(p => ({ ...p })),
+      refWord: '', refScore: '', refTime: '', refReview: '', refMistakes: '', refSpeaking: '',
+      testListening: '', testReading: '', testGrammar: '', testWriting: '', testSpeaking: '', testTotal: '',
+      weekWords: '', weekSolid: '', weekVictory: '', weekAdjust: '',
+      savedAt: null
+    };
+  }
+  return state.days[date];
+}
+
+// ==========================================
+// РЕНДЕР
+// ==========================================
+let currentDate = todayISO();
+
+function renderAll() {
+  document.getElementById('currentDate').value = currentDate;
+  const day = getDay(currentDate);
+
+  document.getElementById('monthlyGoal').value = state.settings.monthlyGoal || '';
+  document.getElementById('monthlyProgress').value = state.settings.monthlyProgress || '';
+  document.getElementById('monthlyDeadline').value = state.settings.monthlyDeadline || '';
+  document.getElementById('w1text').value = state.settings.w1text || '';
+  document.getElementById('w1progress').value = state.settings.w1progress || '';
+  document.getElementById('w2text').value = state.settings.w2text || '';
+  document.getElementById('w2progress').value = state.settings.w2progress || '';
+
+  document.getElementById('newWords').value = day.newWords || '';
+  document.getElementById('grammarText').value = day.grammarText || '';
+  document.getElementById('phrasesText').value = day.phrasesText || '';
+  document.getElementById('refWord').value = day.refWord || '';
+  document.getElementById('refScore').value = day.refScore || '';
+  document.getElementById('refTime').value = day.refTime || '';
+  document.getElementById('refReview').value = day.refReview || '';
+  document.getElementById('refMistakes').value = day.refMistakes || '';
+  document.getElementById('refSpeaking').value = day.refSpeaking || '';
+  document.getElementById('testListening').value = day.testListening || '';
+  document.getElementById('testReading').value = day.testReading || '';
+  document.getElementById('testGrammar').value = day.testGrammar || '';
+  document.getElementById('testWriting').value = day.testWriting || '';
+  document.getElementById('testSpeaking').value = day.testSpeaking || '';
+  document.getElementById('testTotal').value = day.testTotal || '';
+  document.getElementById('weekWords').value = day.weekWords || '';
+  document.getElementById('weekSolid').value = day.weekSolid || '';
+  document.getElementById('weekVictory').value = day.weekVictory || '';
+  document.getElementById('weekAdjust').value = day.weekAdjust || '';
+
+  renderTasks(day);
+  renderPomodoros(day);
+  renderBars();
+  renderHeaderBadges();
+  renderCheckpoints();
+}
+
+function renderTasks(day) {
+  const container = document.getElementById('tasksList');
+  container.innerHTML = '';
+  day.tasks.forEach(task => {
+    const label = document.createElement('label');
+    label.className = 'task-item';
+    label.innerHTML = `
+      <input type="checkbox" ${task.done ? 'checked' : ''} data-task-id="${task.id}">
+      <span>${escapeHtml(task.text)}</span>
+      <button class="task-del" data-del-id="${task.id}">×</button>
+    `;
+    container.appendChild(label);
+  });
+
+  container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      const t = day.tasks.find(x => x.id === e.target.dataset.taskId);
+      if (t) t.done = e.target.checked;
+      persist();
+    });
+  });
+
+  container.querySelectorAll('.task-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const id = e.target.dataset.delId;
+      day.tasks = day.tasks.filter(x => x.id !== id);
+      persist();
+      renderTasks(day);
+    });
+  });
+}
+
+function renderPomodoros(day) {
+  const container = document.getElementById('pomodorosList');
+  container.innerHTML = '';
+  day.pomodoros.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'pomo-card';
+    card.innerHTML = `
+      <div class="pomo-head">
+        <span><span class="num">№${p.num || i+1}</span></span>
+      </div>
+      <div class="time-row">
+        <input type="time" value="${p.start}" data-pomo="${i}" data-field="start">
+        <span class="sep">—</span>
+        <input type="time" value="${p.end}" data-pomo="${i}" data-field="end">
+      </div>
+      <input type="text" value="${escapeHtml(p.task)}" placeholder="Задача" data-pomo="${i}" data-field="task" style="margin-bottom:6px; font-size:13px;">
+      <textarea placeholder="Заметка" data-pomo="${i}" data-field="note" style="min-height:50px; font-size:13px;">${escapeHtml(p.note)}</textarea>
+    `;
+    container.appendChild(card);
+  });
+
+  container.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', e => {
+      const i = parseInt(e.target.dataset.pomo);
+      const f = e.target.dataset.field;
+      if (day.pomodoros[i]) day.pomodoros[i][f] = e.target.value;
+      persist();
+    });
+  });
+}
+
+function renderBars() {
+  const mp = parseInt(state.settings.monthlyProgress) || 0;
+  document.getElementById('monthlyBar').style.width = Math.min(100, mp) + '%';
+  document.getElementById('monthlyText').textContent = mp + '%';
+
+  const w1 = parseInt(state.settings.w1progress) || 0;
+  document.getElementById('w1bar').style.width = Math.min(100, w1) + '%';
+  document.getElementById('w1pct').textContent = w1 + '%';
+
+  const w2 = parseInt(state.settings.w2progress) || 0;
+  document.getElementById('w2bar').style.width = Math.min(100, w2) + '%';
+  document.getElementById('w2pct').textContent = w2 + '%';
+}
+
+function renderHeaderBadges() {
+  const streak = calcStreak();
+  document.getElementById('streakBadge').textContent = '🔥 ' + streak;
+
+  const total = Object.values(state.days).reduce((s, d) => s + (parseInt(d.newWords) || 0), 0);
+  document.getElementById('wordsBadge').textContent = total + ' / ' + TOTAL_WORDS_TARGET;
+}
+
+function renderCheckpoints() {
+  const container = document.getElementById('checkpointsList');
+  if (!container) return;
+  const total = Object.values(state.days).reduce((s, d) => s + (parseInt(d.newWords) || 0), 0);
+  container.innerHTML = CHECKPOINTS.map(cp => {
+    const done = state.settings.checkpoints[cp.id];
+    const pct = Math.min(100, Math.round((total / cp.target) * 100));
+    const cls = done ? 'good' : '';
+    return `
+      <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+        <input type="checkbox" ${done ? 'checked' : ''} data-cp="${cp.id}" style="width:20px; height:20px; accent-color:var(--green);">
+        <div style="flex:1;">
+          <div style="font-weight:600; font-size:13px;">${escapeHtml(cp.label)}</div>
+          <div style="font-size:11px; color:var(--text-dim); margin-top:2px;">Прогресс слов: ${pct}% (${total}/${cp.target})</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.querySelectorAll('input[data-cp]').forEach(cb => {
+    cb.addEventListener('change', e => {
+      state.settings.checkpoints[e.target.dataset.cp] = e.target.checked;
+      persist();
+      renderCheckpoints();
+    });
+  });
+}
+
+// ==========================================
+// СТАТИСТИКА
+// ==========================================
+function calcStreak() {
+  const dates = Object.keys(state.days).filter(d => {
+    const day = state.days[d];
+    return day.savedAt || (day.newWords > 0) || day.tasks.some(t => t.done);
+  }).sort().reverse();
+
+  if (dates.length === 0) return 0;
+
+  const today = todayISO();
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  let streak = 0;
+  let checkDate = new Date();
+
+  if (!dates.includes(today)) {
+    if (!dates.includes(yesterday)) return 0;
+    checkDate = new Date(Date.now() - 86400000);
+  }
+
+  while (true) {
+    const iso = `${checkDate.getFullYear()}-${String(checkDate.getMonth()+1).padStart(2,'0')}-${String(checkDate.getDate()).padStart(2,'0')}`;
+    if (dates.includes(iso)) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else break;
+    if (streak > 1000) break;
+  }
+  return streak;
+}
+
+function getStats() {
+  const days = Object.values(state.days);
+  const totalWords = days.reduce((s, d) => s + (parseInt(d.newWords) || 0), 0);
+  const scores = days.map(d => parseInt(d.refScore)).filter(s => s >= 1 && s <= 5);
+  const avgScore = scores.length ? (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1) : '—';
+  const pomos = days.reduce((s, d) => s + d.pomodoros.filter(p => p.note && p.note.trim()).length, 0);
+  const speaking = days.reduce((s, d) => s + (parseInt(d.refSpeaking) || 0), 0);
+  const minutes = days.reduce((s, d) => s + (parseInt(d.refTime) || 0), 0);
+
+  return { totalWords, avgScore, pomos, streak: calcStreak(), speaking, minutes };
+}
+
+// ==========================================
+// ИСТОРИЯ
+// ==========================================
+function renderHistory() {
+  const container = document.getElementById('historyList');
+  const dates = Object.keys(state.days).sort().reverse();
+
+  if (dates.length === 0) {
+    container.innerHTML = `<div class="empty-state"><span class="emoji">📭</span>Пока нет записей.<br>Начни с вкладки «Сегодня»</div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  dates.forEach(date => {
+    const day = state.days[date];
+    const score = parseInt(day.refScore) || 0;
+    const scoreClass = score >= 4 ? 'good' : score > 0 && score <= 2 ? 'low' : '';
+
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerHTML = `
+      <div>
+        <div class="date-main">${formatDate(date)}</div>
+        <div class="date-sub">
+          ${day.newWords || 0} слов
+          ${day.tasks.filter(t=>t.done).length ? '· ' + day.tasks.filter(t=>t.done).length + '/' + day.tasks.length + ' задач' : ''}
+          ${day.savedAt ? ' · ✅' : ''}
+        </div>
+      </div>
+      ${score ? `<div class="score ${scoreClass}">${score}/5</div>` : ''}
+    `;
+    item.addEventListener('click', () => openDayModal(date));
+    container.appendChild(item);
+  });
+}
+
+function formatDate(iso) {
+  const [y, m, d] = iso.split('-');
+  const dt = new Date(y, m-1, d);
+  return dt.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'short' });
+}
+
+function openDayModal(date) {
+  const day = state.days[date];
+  const content = document.getElementById('modalContent');
+  document.getElementById('modalTitle').textContent = formatDate(date);
+
+  let html = '';
+
+  html += `<div class="modal-section">
+    <h3>📖 Слова и грамматика</h3>
+    <p>${day.newWords || 0} новых слов</p>
+    ${day.grammarText ? `<p>Грамматика: ${escapeHtml(day.grammarText)}</p>` : ''}
+    ${day.phrasesText ? `<p style="margin-top:6px;">Фразы:<br><span style="color:var(--text-dim);">${escapeHtml(day.phrasesText).replace(/\n/g,'<br>')}</span></p>` : ''}
+  </div>`;
+
+  const doneTasks = day.tasks.filter(t => t.done);
+  html += `<div class="modal-section">
+    <h3>📌 Задачи (${doneTasks.length}/${day.tasks.length})</h3>
+    ${day.tasks.length === 0 ? '<p class="empty">Нет задач</p>' :
+      day.tasks.map(t => `<p>${t.done ? '✅' : '⬜'} ${escapeHtml(t.text)}</p>`).join('')}
+  </div>`;
+
+  html += `<div class="modal-section">
+    <h3>🍅 Помидоры</h3>
+    ${day.pomodoros.map(p => `
+      <p><b>${p.start}–${p.end}</b> · ${escapeHtml(p.task)}</p>
+      ${p.note && p.note.trim() ? `<p style="color:var(--text-dim); font-size:13px; margin-left:12px;">→ ${escapeHtml(p.note)}</p>` : ''}
+    `).join('')}
+  </div>`;
+
+  html += `<div class="modal-section">
+    <h3>🌙 Рефлексия</h3>
+    ${day.refWord ? `<p>Итог: <b>${escapeHtml(day.refWord)}</b></p>` : ''}
+    ${day.refScore ? `<p>Оценка: <b>${day.refScore}/5</b></p>` : ''}
+    ${day.refTime ? `<p>Время занятий: ${day.refTime} мин</p>` : ''}
+    ${day.refSpeaking ? `<p>Говорение: ${day.refSpeaking} мин</p>` : ''}
+    ${day.refReview ? `<p>Повторить: ${escapeHtml(day.refReview)}</p>` : ''}
+    ${day.refMistakes ? `<p style="margin-top:6px;">Ошибки:<br><span style="color:var(--text-dim);">${escapeHtml(day.refMistakes).replace(/\n/g,'<br>')}</span></p>` : ''}
+    ${!day.refWord && !day.refScore && !day.refMistakes ? '<p class="empty">Рефлексия не заполнена</p>' : ''}
+  </div>`;
+
+  if (day.testListening || day.testReading || day.testGrammar || day.testWriting || day.testSpeaking || day.testTotal) {
+    html += `<div class="modal-section">
+      <h3>📝 Пробный тест</h3>
+      ${day.testListening ? `<p>Ascolto: ${day.testListening}/20</p>` : ''}
+      ${day.testReading ? `<p>Lettura: ${day.testReading}/20</p>` : ''}
+      ${day.testGrammar ? `<p>Grammatica: ${day.testGrammar}/20</p>` : ''}
+      ${day.testWriting ? `<p>Scrittura: ${day.testWriting}/20</p>` : ''}
+      ${day.testSpeaking ? `<p>Orale: ${day.testSpeaking}/20</p>` : ''}
+      ${day.testTotal ? `<p><b>Итог: ${day.testTotal}%</b></p>` : ''}
+    </div>`;
+  }
+
+  if (day.weekWords || day.weekVictory || day.weekAdjust) {
+    html += `<div class="modal-section">
+      <h3>📊 Итоги недели</h3>
+      ${day.weekWords ? `<p>Слов за неделю: ${day.weekWords}</p>` : ''}
+      ${day.weekSolid ? `<p>Знаю твёрдо: ${day.weekSolid}</p>` : ''}
+      ${day.weekVictory ? `<p>Победа: ${escapeHtml(day.weekVictory)}</p>` : ''}
+      ${day.weekAdjust ? `<p>Изменить: ${escapeHtml(day.weekAdjust)}</p>` : ''}
+    </div>`;
+  }
+
+  html += `<button class="btn" onclick="goToDay('${date}')">✏️ Редактировать этот день</button>`;
+
+  content.innerHTML = html;
+  document.getElementById('modalBackdrop').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target.id !== 'modalBackdrop' && e.target.className !== 'modal-close') return;
+  document.getElementById('modalBackdrop').classList.remove('open');
+}
+
+function goToDay(date) {
+  currentDate = date;
+  renderAll();
+  closeModal();
+  switchTab('today');
+}
+
+// ==========================================
+// ПРОГРЕСС
+// ==========================================
+function renderProgress() {
+  const stats = getStats();
+  document.getElementById('statTotalWords').innerHTML = `${stats.totalWords} <small>/ ${TOTAL_WORDS_TARGET}</small>`;
+  document.getElementById('statStreak').innerHTML = `${stats.streak} <small>дней</small>`;
+  document.getElementById('statAvgScore').innerHTML = `${stats.avgScore} <small>/ 5</small>`;
+  document.getElementById('statPomos').textContent = stats.pomos;
+  document.getElementById('statSpeaking').textContent = stats.speaking + ' мин';
+  document.getElementById('statHours').textContent = (stats.minutes / 60).toFixed(1) + ' ч';
+
+  const pct = Math.min(100, Math.round((stats.totalWords / TOTAL_WORDS_TARGET) * 100));
+  document.getElementById('overallBar').style.width = pct + '%';
+  document.getElementById('overallPct').textContent = pct + '%';
+
+  renderChart('chartWords', 14, date => {
+    const d = state.days[date];
+    return d ? (parseInt(d.newWords) || 0) : 0;
+  }, 'words');
+
+  renderChart('chartScores', 14, date => {
+    const d = state.days[date];
+    return d ? (parseInt(d.refScore) || 0) : 0;
+  }, 'scores');
+}
+
+function renderChart(containerId, days, getValue, type) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  const values = [];
+  const labels = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    values.push(getValue(iso));
+    labels.push(d.getDate());
+  }
+
+  const max = Math.max(...values, type === 'scores' ? 5 : 30) || 1;
+
+  values.forEach((v, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    const h = Math.max(2, (v / max) * 100);
+    bar.style.height = h + '%';
+    if (v === 0) bar.style.background = '#e9ecef';
+    bar.title = v;
+    const label = document.createElement('div');
+    label.className = 'bar-label';
+    label.textContent = labels[i];
+    bar.appendChild(label);
+    container.appendChild(bar);
+  });
+}
+
+// ==========================================
+// СОХРАНЕНИЕ / ЭКСПОРТ
+// ==========================================
+function saveDay() {
+  const day = getDay(currentDate);
+  day.savedAt = new Date().toISOString();
+  persist();
+  toast('✅ Brava/o! День сохранён');
+  renderHeaderBadges();
+}
+
+function exportData() {
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `piano-italiano-backup-${todayISO()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('💾 Бэкап скачан');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.days) throw new Error('Неверный формат');
+      if (confirm(`Загрузить бэкап? Записей в файле: ${Object.keys(data.days).length}. Текущие данные будут заменены.`)) {
+        state = data;
+        persist();
+        renderAll();
+        renderHistory();
+        renderProgress();
+        toast('✅ Бэкап загружен');
+      }
+    } catch(err) {
+      alert('Ошибка: не удалось прочитать файл');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function resetAll() {
+  if (!confirm('Удалить ВСЕ данные? Это нельзя отменить.')) return;
+  if (!confirm('Точно? Последнее предупреждение.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = { days: {}, settings: { monthlyGoal:'', monthlyProgress:0, monthlyDeadline:'', w1text:'', w1progress:0, w2text:'', w2progress:0, checkpoints:{} } };
+  currentDate = todayISO();
+  renderAll();
+  renderHistory();
+  renderProgress();
+  toast('🗑️ Данные удалены');
+}
+
+// ==========================================
+// UI HELPERS
+// ==========================================
+function switchTab(name) {
+  document.querySelectorAll('nav button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === name);
+  });
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.id === 'tab-' + name);
+  });
+  if (name === 'history') renderHistory();
+  if (name === 'progress') renderProgress();
+  window.scrollTo(0, 0);
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function addTask() {
+  const text = prompt('Новая задача:');
+  if (!text || !text.trim()) return;
+  const day = getDay(currentDate);
+  day.tasks.push({ id: 't' + Date.now(), text: text.trim(), done: false });
+  persist();
+  renderTasks(day);
+}
+
+// ==========================================
+// СОБЫТИЯ
+// ==========================================
+function bindEvents() {
+  document.querySelectorAll('nav button').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  document.getElementById('currentDate').addEventListener('change', e => {
+    if (!e.target.value) return;
+    currentDate = e.target.value;
+    renderAll();
+  });
+
+  const settingFields = ['monthlyGoal','monthlyProgress','monthlyDeadline','w1text','w1progress','w2text','w2progress'];
+  settingFields.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      state.settings[id] = el.value;
+      persist();
+      if (id.includes('progress')) renderBars();
+      if (id === 'monthlyProgress') renderHeaderBadges();
+      if (id === 'monthlyDeadline') document.getElementById('monthlyDeadlineMeta').textContent = el.value || '';
+    });
+  });
+
+  const dayFields = ['newWords','grammarText','phrasesText','refWord','refScore','refTime','refReview','refMistakes','refSpeaking','testListening','testReading','testGrammar','testWriting','testSpeaking','testTotal','weekWords','weekSolid','weekVictory','weekAdjust'];
+  dayFields.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      const day = getDay(currentDate);
+      day[id] = el.value;
+      persist();
+      if (id === 'newWords') renderHeaderBadges();
+    });
+  });
+}
+
+// ==========================================
+// СТАРТ
+// ==========================================
+loadState();
+bindEvents();
+renderAll();
+renderHistory();
+renderProgress();
+</script>
+
+</body>
+        </html>
